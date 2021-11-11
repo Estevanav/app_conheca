@@ -12,12 +12,10 @@ class CadastroPontoTuristico extends StatefulWidget {
 
 class _CadastroPontoTuristicoState extends State<CadastroPontoTuristico> {
   PontoTuristico ponto = PontoTuristico();
-
-  var meuItemInicial = 'Defina a categoria desejada';
+  Categoria itemSelecionado = Categoria(id: 2);
 
   @override
   Widget build(BuildContext context) {
-    var service = Provider.of<CategoriaService>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -50,22 +48,35 @@ class _CadastroPontoTuristicoState extends State<CadastroPontoTuristico> {
                         borderRadius: BorderRadius.circular(5.0),
                       ),
                       padding: EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          onChanged: (value) {
-                            setState(() {
-                              meuItemInicial = value.toString();
-                            });
-                          },
-                          value: 2,
-                          items: service.categorias.map((c) {
-                            return DropdownMenuItem(
-                              value: c.id,
-                              child: Text(c.tipo!),
-                            );
-                          }).toList(),
-                        ),
-                      ),
+                      child: Consumer<CategoriaService>(
+                          builder: (context, service, child) {
+                        List<Categoria> lista = service.categorias;
+                        return DropdownButtonHideUnderline(
+                          child: DropdownButton(
+                            onChanged: (value) {
+                              setState(() {
+                                // for (var c in service.categorias) {
+                                //   if (c.id == value) {
+                                //     itemSelecionado = c;
+                                //     break;
+                                //   }
+                                // }
+                                itemSelecionado = service.categorias
+                                    .where((c) => c.id == value)
+                                    .toList()[0];
+                                print(itemSelecionado.tipo);
+                              });
+                            },
+                            value: itemSelecionado.id,
+                            items: lista.map((c) {
+                              return DropdownMenuItem(
+                                value: c.id,
+                                child: Text(c.tipo!),
+                              );
+                            }).toList(),
+                          ),
+                        );
+                      }),
                     ),
                   ),
                   Container(
