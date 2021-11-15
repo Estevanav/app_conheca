@@ -1,14 +1,21 @@
 class Usuario {
-  
   int? id;
   String? nome;
   String? sobrenome;
   int? status;
   String? senha;
   String? email;
-  DateTime? dataNascimento;
+  String? dataNascimento;
 
-  Usuario({id, nome, sobrenome, status, senha, email, dataNascimento});
+  Usuario({id, nome, sobrenome, status, senha, email, dataNascimento}) {
+    this.id = id;
+    this.nome = nome;
+    this.sobrenome = sobrenome;
+    this.senha = senha;
+    this.status = status;
+    this.email = email;
+    this.dataNascimento = dataNascimento;
+  }
 
   factory Usuario.fromJson(Map<String, dynamic> json) {
     return Usuario(
@@ -24,10 +31,8 @@ class Usuario {
 
   Map<String, dynamic> toJson() {
     return {
-      "id": id,
       "nome": nome,
       "sobrenome": sobrenome,
-      "status": status,
       "senha": senha,
       "email": email,
       "dataNascimento": dataNascimento

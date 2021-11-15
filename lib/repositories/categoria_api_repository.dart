@@ -10,8 +10,6 @@ class CategoriaAPIRepository {
     var response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       var json = response.body;
-      // json = json.substring(json.indexOf("["), json.length -1);
-      // print(json);
 
       var dados = jsonDecode(json);
       //print(dados["\$values"]);
@@ -28,7 +26,6 @@ class CategoriaAPIRepository {
   }
 
   Future<void> create(Categoria entity) async {
-    print(jsonEncode(entity.toJson()));
     await http.post(Uri.parse(url),
         headers: {"content-type": "application/json"},
         body: jsonEncode(entity.toJson()));

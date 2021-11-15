@@ -1,4 +1,3 @@
-import 'package:app_conheca/components/components.dart';
 import 'package:app_conheca/entities/categoria.dart';
 import 'package:app_conheca/services/categoria_service.dart';
 import 'package:flutter/material.dart';
@@ -67,12 +66,12 @@ class CadastroCategoria extends StatelessWidget {
                     var service =
                         Provider.of<CategoriaService>(context, listen: false);
                     service.create(categoria);
-                    //Navigator.of(context).pop();
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('Dados processados com sucesso'),
                       ),
                     );
+                    Navigator.of(context).pop();
                   }
                 },
               ),

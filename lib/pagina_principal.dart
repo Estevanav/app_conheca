@@ -1,6 +1,8 @@
 import 'package:app_conheca/components/cardHomeList.dart';
-import 'package:app_conheca/components/components.dart';
+import 'package:app_conheca/entities/categoria.dart';
+import 'package:app_conheca/services/categoria_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PaginaPrincipal extends StatefulWidget {
   @override
@@ -8,16 +10,7 @@ class PaginaPrincipal extends StatefulWidget {
 }
 
 class _PaginaPrincipalState extends State<PaginaPrincipal> {
-  var meuItemInicial = 'Tudo';
-
-  List<String> meusItens = [
-    'Tudo',
-    'Restaurantes',
-    'Hotéis',
-    'Internacionais',
-    'Beleza natural',
-    'Urbano'
-  ];
+  Categoria itemSelecionado = Categoria(id: 2);
 
   late int _selectedIndex = 0;
 
@@ -54,20 +47,40 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
               ),
               padding: EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
               child: DropdownButtonHideUnderline(
-                child: DropdownButton(
-                  onChanged: (value) {
-                    setState(() {
-                      meuItemInicial = value.toString();
-                    });
-                  },
-                  value: meuItemInicial,
-                  items: meusItens.map((itens) {
-                    return DropdownMenuItem(
-                      value: itens,
-                      child: Text(itens),
-                    );
-                  }).toList(),
-                ),
+                child: Consumer<CategoriaService>(
+                    builder: (context, service, child) {
+                  List<Categoria> lista = service.categorias;
+                  return DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                      onChanged: (value) {
+                        setState(() {
+                          // Método 1
+                          // for (var c in service.categorias) {
+                          //   if (c.id == value) {
+                          //     itemSelecionado = c;
+                          //     break;
+                          //   }
+                          // }
+                          // Método 2
+                          // itemSelecionado = service.categorias
+                          //     .where((c) => c.id == value)
+                          //     .toList()[0];
+                          // print(itemSelecionado.tipo);
+                          //Método 3
+                          itemSelecionado = service.categorias
+                              .firstWhere((c) => c.id == value);
+                        });
+                      },
+                      value: itemSelecionado.id,
+                      items: lista.map((c) {
+                        return DropdownMenuItem(
+                          value: c.id,
+                          child: Text(c.tipo!),
+                        );
+                      }).toList(),
+                    ),
+                  );
+                }),
               ),
             ),
           ),
@@ -95,7 +108,7 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
                 padding: const EdgeInsets.fromLTRB(20.0, 8.0, 20.0, 8.0),
                 child: TextField(
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(),                    
+                    border: OutlineInputBorder(),
                     labelText: 'Pesquise aqui seu ponto turístico',
                     prefixIcon: Icon(Icons.search),
                   ),

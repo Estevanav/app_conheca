@@ -6,14 +6,18 @@ import 'package:app_conheca/pagina_configuracoes.dart';
 import 'package:app_conheca/pagina_login.dart';
 import 'package:app_conheca/pagina_principal.dart';
 import 'package:app_conheca/services/categoria_service.dart';
+import 'package:app_conheca/services/usuario_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => CategoriaService(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => CategoriaService()),
+        ChangeNotifierProvider(create: (context) => UsuarioService()),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
@@ -22,8 +26,7 @@ class App extends StatelessWidget {
               ? Brightness.dark
               : Brightness.light,
         ),
-        home: CadastroCategoria(),
-        initialRoute: '/cadastroPonto',
+        home: PaginaPrincipal(),
         routes: {
           '/login': (context) => PaginaLogin(),
           '/cadastroUsuario': (context) => CadastroUsuario(),
